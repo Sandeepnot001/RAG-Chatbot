@@ -21,7 +21,13 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 # CORS setup
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # For dev only
+    allow_origins=[
+        "https://frontend-gamma-neon-21.vercel.app",
+        "https://frontend-six-sigma-indol.vercel.app", # Adding common patterns
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:5174",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
