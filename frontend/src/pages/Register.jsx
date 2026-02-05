@@ -33,7 +33,7 @@ const Register = () => {
             } else {
                 const text = await response.text();
                 console.error("Invalid response:", text);
-                throw new Error(API_BASE_URL ? "Server error: Received HTML instead of JSON." : "Backend URL (VITE_API_URL) is not configured in Vercel.");
+                throw new Error("Server error: Received HTML instead of JSON. Check if the backend is running and the API URL is correct.");
             }
 
             if (!response.ok) {
