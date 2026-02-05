@@ -1,0 +1,39 @@
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+langchain_env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Build and Node
+node_modules/
+dist/
+build/
+.next/
+out/
+
+# Logs and SQLite
+*.log
+*.sqlite3
+backend.log
+conn_output*.txt
+models_list.txt
+
+# OS
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# Project specific
+data/tmp/
+data/vector_stores/
+backend/data/

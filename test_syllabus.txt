@@ -1,0 +1,4 @@
+Test content for RAG chatbot.
+This text explains that the college semester starts on September 1st.
+The exam rules state that students must carry ID cards.
+Attendance requirement is 85%.
