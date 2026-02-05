@@ -1,0 +1,12 @@
+{
+    "sandeepnot001": {
+        "username": "sandeepnot001",
+        "role": "admin",
+        "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$lVJKqTWmNKZ0jhEiZOz9fw$ScoeCGaeNLEvVeHrP/GUq4kdG1ePTmz/h94knNVHvzQ"
+    },
+    "student": {
+        "username": "student",
+        "role": "student",
+        "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$zznH2JszZoyxFuK8t/Y+Jw$cOkyUl6x8Pimo251j9nFveHLFaMZm9RwapUP9TZFpkA"
+    }
+}

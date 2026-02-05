@@ -10,6 +10,7 @@ import Settings from './pages/Settings';
 
 import StudentLogin from './pages/StudentLogin';
 import AdminLogin from './pages/AdminLogin';
+import Register from './pages/Register';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login/student" element={<StudentLogin />} />
           <Route path="/login/admin" element={<AdminLogin />} />
+          <Route path="/register" element={<Register />} />
 
           <Route element={<ProtectedRoute role="student" />}>
             <Route path="/chat" element={<StudentChat />} />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { BookOpen, Monitor, Upload, Home, Menu, X, LogOut, User, Shield } from 'lucide-react';
+import { BookOpen, Monitor, Upload, Home, Menu, X, LogOut, User, Shield, UserPlus } from 'lucide-react';
 
 const Navbar = () => {
     const location = useLocation();
@@ -87,6 +87,13 @@ const Navbar = () => {
                                     <Shield size={18} />
                                     Admin Login
                                 </Link>
+                                <Link
+                                    to="/register"
+                                    className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-all duration-200 ${isActive('/register')}`}
+                                >
+                                    <UserPlus size={18} />
+                                    Register
+                                </Link>
                             </>
                         ) : (
                             <button
@@ -158,6 +165,13 @@ const Navbar = () => {
                                     className={`block px-3 py-2 rounded-md text-base font-medium flex items-center gap-2 ${isActive('/login/admin')}`}
                                 >
                                     <Shield size={18} /> Admin Login
+                                </Link>
+                                <Link
+                                    to="/register"
+                                    onClick={() => setIsOpen(false)}
+                                    className={`block px-3 py-2 rounded-md text-base font-medium flex items-center gap-2 ${isActive('/register')}`}
+                                >
+                                    <UserPlus size={18} /> Register
                                 </Link>
                             </>
                         ) : (

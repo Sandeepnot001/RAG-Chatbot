@@ -6,6 +6,8 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
 import os
+import json
+from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -38,24 +40,30 @@ class TokenData(BaseModel):
     username: Union[str, None] = None
     role: Union[str, None] = None
 
-# Mock Database
-users_db = {
-    "sandeepnot001": {
-        "username": "sandeepnot001",
-        "role": "admin",
-        "hashed_password": pwd_context.hash("sandeep@872004"),
-    },
-    "student": {
-        "username": "student",
-        "role": "student",
-        "hashed_password": pwd_context.hash("student123"),
-    },
-}
+# File-based Database
+USERS_FILE = Path("data/users.json")
+
+def load_users():
+    if not USERS_FILE.exists():
+        # Ensure parent directory exists
+        USERS_FILE.parent.mkdir(parents=True, exist_ok=True)
+        return {}
+    try:
+        with open(USERS_FILE, "r") as f:
+            return json.load(f)
+    except:
+        return {}
+
+def save_users(users):
+    USERS_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with open(USERS_FILE, "w") as f:
+        json.dump(users, f, indent=4)
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
 def get_user(db, username: str):
+    # db is now expected to be the loaded users dict
     if username in db:
         user_dict = db[username]
         return UserInDB(**user_dict)
@@ -87,7 +95,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         token_data = TokenData(username=username, role=role)
     except JWTError:
         raise credentials_exception
-    user = get_user(users_db, username=token_data.username)
+    user = get_user(load_users(), username=token_data.username)
     if user is None:
         raise credentials_exception
     return user
@@ -107,7 +115,7 @@ router = APIRouter()
 
 @router.post("/token", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = get_user(users_db, form_data.username)
+    user = get_user(load_users(), form_data.username)
     if not user or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -119,3 +127,28 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         data={"sub": user.username, "role": user.role}, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer", "role": user.role}
+
+class UserCreate(BaseModel):
+    username: str
+    password: str
+    role: str # "admin" or "student"
+
+@router.post("/register")
+async def register_user(user_in: UserCreate):
+    users = load_users()
+    if user_in.username in users:
+        raise HTTPException(status_code=400, detail="Username already registered")
+    
+    if user_in.role not in ["admin", "student"]:
+        raise HTTPException(status_code=400, detail="Invalid role. Must be 'admin' or 'student'.")
+
+    hashed_password = pwd_context.hash(user_in.password)
+    new_user = {
+        "username": user_in.username,
+        "role": user_in.role,
+        "hashed_password": hashed_password
+    }
+    
+    users[user_in.username] = new_user
+    save_users(users)
+    return {"message": "User registered successfully"}
