@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: rag-chatbot-backend
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.1
+      - key: LLM_PROVIDER
+        value: Google
+      - fromContext: GOOGLE_API_KEY
+      - fromContext: OPENAI_API_KEY
+      - fromContext: SECRET_KEY
