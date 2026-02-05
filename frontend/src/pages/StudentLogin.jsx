@@ -26,8 +26,25 @@ const StudentLogin = () => {
             });
 
             if (!response.ok) {
-                const data = await response.json();
-                throw new Error(data.detail || 'Login failed');
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    const data = await response.json();
+                    throw new Error(data.detail || 'Login failed');
+                } else {
+                    const text = await response.text();
+                    console.error("Non-JSON error response:", text);
+                    if (!API_BASE_URL) {
+                        throw new Error("Backend URL (VITE_API_URL) is not configured in Vercel.");
+                    }
+                    throw new Error("Server error: Received HTML instead of JSON. Check backend status.");
+                }
+            }
+
+            const contentType = response.headers.get("content-type");
+            if (!contentType || contentType.indexOf("application/json") === -1) {
+                const text = await response.text();
+                console.error("Expected JSON but got:", text);
+                throw new Error("Invalid server response. Please configure VITE_API_URL in Vercel.");
             }
 
             const data = await response.json();

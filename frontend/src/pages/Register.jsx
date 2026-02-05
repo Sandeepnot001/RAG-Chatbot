@@ -26,7 +26,15 @@ const Register = () => {
                 body: JSON.stringify({ username, password, role }),
             });
 
-            const data = await response.json();
+            const contentType = response.headers.get("content-type");
+            let data = {};
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                data = await response.json();
+            } else {
+                const text = await response.text();
+                console.error("Invalid response:", text);
+                throw new Error(API_BASE_URL ? "Server error: Received HTML instead of JSON." : "Backend URL (VITE_API_URL) is not configured in Vercel.");
+            }
 
             if (!response.ok) {
                 throw new Error(data.detail || 'Registration failed');
@@ -83,8 +91,8 @@ const Register = () => {
                                     type="button"
                                     onClick={() => setRole('student')}
                                     className={`flex items-center justify-center gap-2 p-3 rounded-lg border-2 transition-all ${role === 'student'
-                                            ? 'border-indigo-600 bg-indigo-50 text-indigo-700'
-                                            : 'border-gray-200 hover:border-gray-300 text-gray-500'
+                                        ? 'border-indigo-600 bg-indigo-50 text-indigo-700'
+                                        : 'border-gray-200 hover:border-gray-300 text-gray-500'
                                         }`}
                                 >
                                     <GraduationCap className="h-5 w-5" />
@@ -94,8 +102,8 @@ const Register = () => {
                                     type="button"
                                     onClick={() => setRole('admin')}
                                     className={`flex items-center justify-center gap-2 p-3 rounded-lg border-2 transition-all ${role === 'admin'
-                                            ? 'border-indigo-600 bg-indigo-50 text-indigo-700'
-                                            : 'border-gray-200 hover:border-gray-300 text-gray-500'
+                                        ? 'border-indigo-600 bg-indigo-50 text-indigo-700'
+                                        : 'border-gray-200 hover:border-gray-300 text-gray-500'
                                         }`}
                                 >
                                     <Shield className="h-5 w-5" />
