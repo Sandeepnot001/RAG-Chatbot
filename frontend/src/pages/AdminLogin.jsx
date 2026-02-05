@@ -33,10 +33,7 @@ const AdminLogin = () => {
                 } else {
                     const text = await response.text();
                     console.error("Non-JSON error response:", text);
-                    if (!API_BASE_URL) {
-                        throw new Error("Backend URL (VITE_API_URL) is not configured in Vercel.");
-                    }
-                    throw new Error("Server error: Received HTML instead of JSON. Check backend status.");
+                    throw new Error("Server error: Received HTML instead of JSON. Check backend status and VITE_API_URL.");
                 }
             }
 
@@ -44,7 +41,7 @@ const AdminLogin = () => {
             if (!contentType || contentType.indexOf("application/json") === -1) {
                 const text = await response.text();
                 console.error("Expected JSON but got:", text);
-                throw new Error("Invalid server response. Please configure VITE_API_URL in Vercel.");
+                throw new Error("Invalid server response. Please verify VITE_API_URL configuration.");
             }
 
             const data = await response.json();
