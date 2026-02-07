@@ -11,7 +11,7 @@ if (window.location.protocol === 'https:' && envApiUrl && envApiUrl.startsWith('
 // 2. Resolve final API URL with fallback
 // If VITE_API_URL is missing, we try a fallback. 
 // NOTE: Users should set VITE_API_URL in Vercel Dashboard to their actual Render URL.
-export const API_BASE_URL = envApiUrl || (import.meta.env.DEV ? 'http://127.0.0.1:8000' : 'https://rag-chatbot-backend.onrender.com');
+export const API_BASE_URL = envApiUrl || (import.meta.env.DEV ? 'http://127.0.0.1:8000' : 'https://rag-chatbot-cocl.onrender.com');
 
 console.log("Final API URL being used:", API_BASE_URL);
 
