@@ -22,8 +22,8 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://ragchatbot-rho.vercel.app",
-        "https://frontend-gamma-neon-21.vercel.app",
+        "https://ragchatbot-rho.vercel.app",   # your frontend
+        "https://vercel.app",
         "http://localhost:5173",
         "http://localhost:3000",
     ],

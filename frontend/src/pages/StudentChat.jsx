@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Send, Menu, Loader } from 'lucide-react';
 import ChatSidebar from '../components/ChatSidebar';
 import ChatMessage from '../components/ChatMessage';
+import { API_BASE_URL } from '../apiConfig';
 
 const StudentChat = () => {
     // Session Management
@@ -85,7 +86,7 @@ const StudentChat = () => {
             const token = localStorage.getItem('token');
             const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-            const response = await axios.post('/api/chat', { question: userMessage.content }, { headers });
+            const response = await axios.post(`${API_BASE_URL}/api/chat`, { question: userMessage.content }, { headers });
             const botMessage = {
                 role: 'assistant',
                 content: response.data.answer,

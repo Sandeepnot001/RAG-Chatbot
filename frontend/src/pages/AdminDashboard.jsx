@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Upload, CheckCircle, AlertCircle, FileText, BarChart3, Users, Database, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
+import { API_BASE_URL } from '../apiConfig';
 
 const AdminDashboard = () => {
     const [file, setFile] = useState(null);
@@ -33,7 +34,7 @@ const AdminDashboard = () => {
 
     const fetchStats = async () => {
         try {
-            const response = await axios.get('/api/stats', { headers: getAuthHeader() });
+            const response = await axios.get(`${API_BASE_URL}/api/stats`, { headers: getAuthHeader() });
             setStats(response.data);
         } catch (error) {
             console.error("Failed to fetch stats", error);
@@ -45,7 +46,7 @@ const AdminDashboard = () => {
 
     const fetchDocuments = async () => {
         try {
-            const response = await axios.get('/api/documents', { headers: getAuthHeader() });
+            const response = await axios.get(`${API_BASE_URL}/api/documents`, { headers: getAuthHeader() });
             if (response.data && response.data.documents) {
                 setDocuments(response.data.documents);
             }
@@ -82,7 +83,7 @@ const AdminDashboard = () => {
         formData.append('semester', semester);
 
         try {
-            const response = await axios.post('/api/upload', formData, {
+            const response = await axios.post(`${API_BASE_URL}/api/upload`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     ...getAuthHeader()
@@ -110,7 +111,7 @@ const AdminDashboard = () => {
         if (!window.confirm(`Are you sure you want to delete ${filename}?`)) return;
 
         try {
-            await axios.delete(`/api/documents/${filename}`, {
+            await axios.delete(`${API_BASE_URL}/api/documents/${filename}`, {
                 headers: getAuthHeader()
             });
             setStatus({ type: 'success', message: `Deleted ${filename}` });
