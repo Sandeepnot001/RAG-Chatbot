@@ -40,6 +40,10 @@ async def startup_event():
     os.makedirs("data/tmp", exist_ok=True)
     os.makedirs("data/vector_stores", exist_ok=True)
 
+@app.get("/")
+def root():
+    return {"status": "Backend running", "service": "College Document Chatbot API"}
+
 @app.get("/health")
 async def health_check():
     return {"status": "healthy", "service": "College Document Chatbot API"}
@@ -88,7 +92,6 @@ async def chat_endpoint(
     print(f"DEBUG: chat_endpoint received request: {body}")
     try:
         answer, sources = rag_service.answer_question(body.question)
-        # answer, sources = "Mock Answer", []
         return QueryResponse(answer=answer, sources=sources)
     except Exception as e:
         print(f"DEBUG ERROR: {e}")
@@ -110,14 +113,9 @@ async def list_documents(current_user: User = Depends(get_current_admin_user)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
 @app.delete("/api/documents/{filename}")
 async def delete_document(filename: str, current_user: User = Depends(get_current_admin_user)):
     try:
-        # Decode filename if it comes URL encoded? 
-        # Usually FastAPI handles path params well, but let's be safe if it includes slashes etc (unlikely for filenames here).
         success = rag_service.delete_document(filename)
         if success:
             return {"message": f"Successfully deleted {filename}"}
@@ -128,4 +126,4 @@ async def delete_document(filename: str, current_user: User = Depends(get_curren
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("backend.main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

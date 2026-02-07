@@ -7,7 +7,7 @@ import signal
 def start_backend():
     print("Starting Backend...")
     return subprocess.Popen(
-        [sys.executable, "-m", "backend.main"],
+        [sys.executable, "-m", "main"],
         cwd=os.getcwd()
     )
 
