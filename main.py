@@ -51,7 +51,7 @@ def root():
 
 @app.get("/health")
 async def health_check():
-    return {"status": "healthy", "service": "College Document Chatbot API"}
+    return {"status": "ok"}
 
 @app.post("/api/upload")
 async def upload_document(
