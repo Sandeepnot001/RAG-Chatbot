@@ -58,10 +58,11 @@ const StudentLogin = () => {
             navigate('/chat');
         } catch (err) {
             console.error("Login error:", err);
-            if (err.message === 'Failed to fetch') {
-                setError(`Failed to connect to the backend at ${API_BASE_URL}. Please ensure your backend is running and reachable.`);
+            const errMsg = err.message || '';
+            if (errMsg.toLowerCase().includes('failed to fetch')) {
+                setError(`Failed to connect to the backend at ${API_BASE_URL}. Please ensure your backend is running and allow-listed (Check Mixed Content / CORS).`);
             } else {
-                setError(err.message);
+                setError(errMsg);
             }
         }
     };
