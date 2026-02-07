@@ -17,6 +17,10 @@ const StudentLogin = () => {
         formData.append('password', password);
 
         try {
+            if (!API_BASE_URL) {
+                throw new Error("API URL is not configured. Please check Vercel environment variables.");
+            }
+
             const response = await fetch(`${API_BASE_URL}/auth/token`, {
                 method: 'POST',
                 headers: {
@@ -33,7 +37,7 @@ const StudentLogin = () => {
                 } else {
                     const text = await response.text();
                     console.error("Non-JSON error response:", text);
-                    throw new Error("Server error: Received HTML instead of JSON. Check backend status and VITE_API_URL.");
+                    throw new Error(`Server returned non-JSON response (${response.status}). The API URL might be incorrect or pointing to a non-API page.`);
                 }
             }
 
@@ -53,7 +57,12 @@ const StudentLogin = () => {
             localStorage.setItem('role', data.role);
             navigate('/chat');
         } catch (err) {
-            setError(err.message);
+            console.error("Login error:", err);
+            if (err.message === 'Failed to fetch') {
+                setError(`Failed to connect to the backend at ${API_BASE_URL}. Please ensure your backend is running and reachable.`);
+            } else {
+                setError(err.message);
+            }
         }
     };
 

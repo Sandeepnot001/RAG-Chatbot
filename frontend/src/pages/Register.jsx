@@ -18,6 +18,10 @@ const Register = () => {
         setLoading(true);
 
         try {
+            if (!API_BASE_URL) {
+                throw new Error("API URL is not configured. Please check Vercel environment variables.");
+            }
+
             const response = await fetch(`${API_BASE_URL}/auth/register`, {
                 method: 'POST',
                 headers: {
@@ -32,12 +36,12 @@ const Register = () => {
                 data = await response.json();
             } else {
                 const text = await response.text();
-                console.error("Invalid response:", text);
-                throw new Error("Server error: Received HTML instead of JSON. Check if the backend is running and the API URL is correct.");
+                console.error("Invalid response format:", text);
+                throw new Error(`Server returned non-JSON response (${response.status}). The API URL might be incorrect or pointing to a non-API page.`);
             }
 
             if (!response.ok) {
-                throw new Error(data.detail || 'Registration failed');
+                throw new Error(data.detail || `Registration failed with status ${response.status}`);
             }
 
             setSuccess(true);
@@ -45,7 +49,12 @@ const Register = () => {
                 navigate(role === 'admin' ? '/login/admin' : '/login/student');
             }, 2000);
         } catch (err) {
-            setError(err.message);
+            console.error("Registration error:", err);
+            if (err.message === 'Failed to fetch') {
+                setError(`Failed to connect to the backend at ${API_BASE_URL}. Please ensure your backend is running and reachable.`);
+            } else {
+                setError(err.message);
+            }
         } finally {
             setLoading(false);
         }

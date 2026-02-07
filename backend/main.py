@@ -21,13 +21,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 # CORS setup
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://frontend-gamma-neon-21.vercel.app",
-        "https://frontend-six-sigma-indol.vercel.app", # Adding common patterns
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost:5174",
-    ],
+    allow_origins=["*"], # Relaxed for troubleshooting
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -45,6 +39,10 @@ async def startup_event():
     # Ensure directories exist
     os.makedirs("data/tmp", exist_ok=True)
     os.makedirs("data/vector_stores", exist_ok=True)
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy", "service": "College Document Chatbot API"}
 
 @app.post("/api/upload")
 async def upload_document(
