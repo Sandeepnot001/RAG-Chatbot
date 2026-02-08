@@ -108,6 +108,8 @@ const StudentChat = () => {
             if (error.response && error.response.status === 401) {
                 content = 'Your session has expired or you are not logged in. Redirecting to login...';
                 setTimeout(() => window.location.href = '/', 2000); // Redirect to home/login
+            } else if (error.response && error.response.status === 429) {
+                content = 'Slow down! Too many requests. Please wait a moment before asking again.';
             }
 
             const errorMessage = {

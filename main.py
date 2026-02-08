@@ -24,6 +24,8 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "http://127.0.0.1:5173",
+        "http://localhost:5174",
+        "http://127.0.0.1:5174",
         "http://localhost:3000",
     ],
     allow_credentials=True,
@@ -87,7 +89,7 @@ async def upload_document(
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/chat", response_model=QueryResponse)
-@limiter.limit("5/minute")
+@limiter.limit("1000/minute")
 async def chat_endpoint(
     request: Request, # Required for limiter
     body: QueryRequest,

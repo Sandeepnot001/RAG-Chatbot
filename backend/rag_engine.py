@@ -39,7 +39,9 @@ class RAGService:
         self.vector_store_dir.parent.mkdir(parents=True, exist_ok=True)
         
         self.stats_file = Path("data/stats.json")
+        print("DEBUG: Starting RAGService initialization", flush=True)
         self._init_stats_file()
+        print("DEBUG: Stats file initialized", flush=True)
         
         
         # Configuration
@@ -48,10 +50,16 @@ class RAGService:
         self.openai_api_key = os.getenv("OPENAI_API_KEY")
         
         # Initialize components
+        print("DEBUG: Getting embeddings", flush=True)
         self.embeddings = self._get_embeddings()
+        print("DEBUG: Embeddings initialized", flush=True)
+        print("DEBUG: Getting vector store", flush=True)
         self.vector_store = self._get_vector_store()
+        print("DEBUG: Vector store initialized", flush=True)
         self.llm = self._get_llm() # Unified LLM instance for Chains
+        print("DEBUG: LLM initialized", flush=True)
         self.genai_model = genai.GenerativeModel("gemini-flash-latest") # Direct model for robust operations
+        print("DEBUG: GenAI model initialized", flush=True)
         
         # Shared Memory
         self.memory = ConversationBufferMemory(
@@ -64,8 +72,8 @@ class RAGService:
         self.academic_chain = self._create_academic_chain()
 
     def _get_embeddings(self):
-        # Switching to Google Embeddings to save local memory
-        return GoogleGenerativeAIEmbeddings(model="models/text-embedding-004", google_api_key=self.google_api_key, transport="rest")
+        # Using the verified correct model name for this account
+        return GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001", google_api_key=self.google_api_key, transport="rest")
 
     def _get_vector_store(self):
         # Initialize Chroma
