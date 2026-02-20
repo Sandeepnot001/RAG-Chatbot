@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: rag-chatbot-backend
+    name: rag-chatbot-cocl
     env: python
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
