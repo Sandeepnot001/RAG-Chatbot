@@ -4,16 +4,21 @@
     "framework": "vite",
     "rewrites": [
         {
-            "source": "/api/:path*",
+            "source": "/api/(.*)",
             "destination": "/api/index.py"
         },
         {
-            "source": "/auth/:path*",
+            "source": "/auth/(.*)",
             "destination": "/api/index.py"
         },
         {
-            "source": "/(.*)",
+            "source": "/((?!api|auth).*)",
             "destination": "/index.html"
         }
-    ]
+    ],
+    "functions": {
+        "api/index.py": {
+            "runtime": "vercel-python@0.1.0"
+        }
+    }
 }

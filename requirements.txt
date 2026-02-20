@@ -17,3 +17,5 @@ slowapi
 python-dotenv
 langchain-classic
 langchain-text-splitters
+argon2-cffi
+mangum
