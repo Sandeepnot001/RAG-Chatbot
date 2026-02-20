@@ -8,5 +8,25 @@
         "username": "student",
         "role": "student",
         "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$zznH2JszZoyxFuK8t/Y+Jw$cOkyUl6x8Pimo251j9nFveHLFaMZm9RwapUP9TZFpkA"
+    },
+    "prabu": {
+        "username": "prabu",
+        "role": "admin",
+        "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$3dtbK8U4R0hpDeGcU8qZsw$mYR+7VZpvBy0SMjNCvygd+vryYbV2FaqOEQhJ+n8k3o"
+    },
+    "priya": {
+        "username": "priya",
+        "role": "student",
+        "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$mTOGsHbunZPynpNSKmXsHQ$oDzQ6hLaL558ceJDHY0cwwSoeKggerW+FHGCseApi4o"
+    },
+    "sandeep": {
+        "username": "sandeep",
+        "role": "student",
+        "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$OIdwztn7/18rJeQcgxAi5A$+A2DQg8dgkfxew6TsRCV9X2Ef22Dt7Wj9/8VHFcL6Uk"
+    },
+    "admin": {
+        "username": "admin",
+        "role": "admin",
+        "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$nNP6f2+NsVYKgTCm9P7/3w$3Wu+BGILi6V1YpFEWPreV0vmLKZc1cPS7M3LEuKewxg"
     }
 }
