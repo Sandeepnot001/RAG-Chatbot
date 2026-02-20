@@ -1,7 +1,8 @@
-console.log("%c--- CollegeBot Localhost API Configuration ---", "color: blue; font-weight: bold;");
+console.log("%c--- CollegeBot Full-Stack API Configuration ---", "color: blue; font-weight: bold;");
 
-// In purely local mode, we always point to the local FastAPI server
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+// We use relative paths by pointing to the same origin. 
+// This allows the frontend (Vercel) to talk to the backend (also on Vercel) seamlessly.
+export const API_BASE_URL = window.location.origin;
 
-console.log("Local API URL being used:", API_BASE_URL);
+console.log("Current API Base URL:", API_BASE_URL);
 console.log("---------------------------------------");
