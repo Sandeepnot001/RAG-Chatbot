@@ -32,15 +32,18 @@ genai.configure(transport="rest")
 
 class RAGService:
     def __init__(self):
-        self.tmp_dir = Path("data/tmp")
-        self.vector_store_dir = Path("data/vector_stores/college_docs")
+        # Use /tmp for ALL disk operations on Vercel
+        self.base_dir = Path("/tmp/data")
+        self.tmp_dir = self.base_dir / "tmp"
+        self.vector_store_dir = self.base_dir / "vector_stores/college_docs"
+        self.stats_file = self.base_dir / "stats.json"
         
-        self.tmp_dir.mkdir(parents=True, exist_ok=True)
-        self.vector_store_dir.parent.mkdir(parents=True, exist_ok=True)
-        
-        self.stats_file = Path("data/stats.json")
-        print("DEBUG: Starting RAGService initialization", flush=True)
-        self._init_stats_file()
+        try:
+            self.tmp_dir.mkdir(parents=True, exist_ok=True)
+            self.vector_store_dir.parent.mkdir(parents=True, exist_ok=True)
+            self._init_stats_file()
+        except Exception as e:
+            print(f"CRITICAL: Failed to initialize directories: {e}", flush=True)
         print("DEBUG: Stats file initialized", flush=True)
         
         

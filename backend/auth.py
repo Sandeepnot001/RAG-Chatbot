@@ -40,8 +40,8 @@ class TokenData(BaseModel):
     username: Union[str, None] = None
     role: Union[str, None] = None
 
-# File-based Database
-USERS_FILE = Path("data/users.json")
+# File-based Database (Use /tmp for Vercel)
+USERS_FILE = Path("/tmp/data/users.json")
 
 def load_users():
     if not USERS_FILE.exists():
