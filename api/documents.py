@@ -3,24 +3,25 @@ import json
 import os
 import sys
 from pathlib import Path
-from jose import JWTError, jwt
 from urllib.parse import urlparse
 
 # Add root directory to sys.path
 root_path = Path(__file__).parent.parent
 sys.path.append(str(root_path))
 
-try:
-    from backend.rag_engine import RAGService
-    from backend.auth import SECRET_KEY, ALGORITHM, load_users
-    rag_service = RAGService()
-except ImportError:
-    pass
-
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
+        try:
+            from backend.rag_engine import RAGService
+            from backend.auth import SECRET_KEY, ALGORITHM, load_users
+            from jose import jwt
+            rag_service = RAGService()
+        except Exception as e:
+            self.send_error_response(500, f"Initialization error: {str(e)}")
+            return
+
         # Auth Check
-        user = self.get_current_user()
+        user = self.get_current_user(SECRET_KEY, ALGORITHM, load_users)
         if not user or user.get('role') != 'admin':
             self.send_error_response(403, "Admin access required")
             return
@@ -29,24 +30,26 @@ class handler(BaseHTTPRequestHandler):
             documents = rag_service.get_documents()
             self.send_success_response({"documents": documents})
         except Exception as e:
-            self.send_error_response(500, str(e))
+            self.send_error_response(500, f"Documents error: {str(e)}")
 
     def do_DELETE(self):
+        try:
+            from backend.rag_engine import RAGService
+            from backend.auth import SECRET_KEY, ALGORITHM, load_users
+            rag_service = RAGService()
+        except Exception as e:
+            self.send_error_response(500, f"Initialization error: {str(e)}")
+            return
+
         # Auth Check
-        user = self.get_current_user()
+        user = self.get_current_user(SECRET_KEY, ALGORITHM, load_users)
         if not user or user.get('role') != 'admin':
             self.send_error_response(403, "Admin access required")
             return
 
-        # Vercel path handling: /api/documents/{filename}
-        # The rewrite in vercel.json sends /api/documents/* to api/documents.py
         parsed_path = urlparse(self.path)
         path_parts = parsed_path.path.split('/')
-        
-        # Expecting ['', 'api', 'documents', 'filename']
-        filename = None
-        if len(path_parts) > 3:
-            filename = path_parts[3]
+        filename = path_parts[3] if len(path_parts) > 3 else None
 
         if not filename:
             self.send_error_response(400, "Filename is required")
@@ -61,7 +64,8 @@ class handler(BaseHTTPRequestHandler):
         except Exception as e:
             self.send_error_response(500, str(e))
 
-    def get_current_user(self):
+    def get_current_user(self, SECRET_KEY, ALGORITHM, load_users):
+        from jose import jwt
         auth_header = self.headers.get('Authorization', '')
         if not auth_header.startswith('Bearer '):
             return None
@@ -78,12 +82,14 @@ class handler(BaseHTTPRequestHandler):
 
     def send_success_response(self, data):
         self.send_response(200)
+        self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Content-Type", "application/json")
         self.end_headers()
         self.wfile.write(json.dumps(data).encode())
 
     def send_error_response(self, status_code, message):
         self.send_response(status_code)
+        self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Content-Type", "application/json")
         self.end_headers()
         self.wfile.write(json.dumps({"detail": message}).encode())
