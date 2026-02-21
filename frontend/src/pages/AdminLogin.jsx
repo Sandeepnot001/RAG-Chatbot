@@ -21,7 +21,7 @@ const AdminLogin = () => {
                 throw new Error("API URL is not configured. Please check Vercel environment variables.");
             }
 
-            const response = await fetch(`${API_BASE_URL}/api/token`, {
+            const response = await fetch(`${API_BASE_URL}/api/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',

@@ -1,20 +1,17 @@
 {
-    "buildCommand": "npm install --prefix frontend && npm run build --prefix frontend",
-    "outputDirectory": "frontend/dist",
-    "framework": "vite",
+    "functions": {
+        "api/**/*.py": {
+            "runtime": "python3.10"
+        }
+    },
     "rewrites": [
         {
             "source": "/api/(.*)",
-            "destination": "/api/index.py"
+            "destination": "/api/$1"
         },
         {
-            "source": "/((?!api|auth).*)",
+            "source": "/((?!api).*)",
             "destination": "/index.html"
         }
-    ],
-    "functions": {
-        "api/index.py": {
-            "runtime": "vercel-python@0.1.0"
-        }
-    }
+    ]
 }
