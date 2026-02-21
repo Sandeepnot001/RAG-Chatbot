@@ -9,7 +9,7 @@ def test_login(username, password):
     print(f"Testing login for {username}...")
     try:
         response = requests.post(
-            f"{BASE_URL}/auth/token",
+            f"{BASE_URL}/api/token",
             data={"username": username, "password": password}
         )
         if response.status_code == 200:

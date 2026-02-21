@@ -40,7 +40,7 @@ rag_service = RAGService()
 
 # Auth Router
 from backend.auth import router as auth_router, get_current_admin_user, get_current_student_user, User
-app.include_router(auth_router, prefix="/auth", tags=["auth"])
+app.include_router(auth_router, prefix="/api", tags=["auth"])
 
 @app.on_event("startup")
 async def startup_event():

@@ -22,7 +22,7 @@ const Register = () => {
                 throw new Error("API URL is not configured. Please check Vercel environment variables.");
             }
 
-            const response = await fetch(`${API_BASE_URL}/auth/register`, {
+            const response = await fetch(`${API_BASE_URL}/api/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
