@@ -14,4 +14,5 @@ python-multipart
 slowapi
 python-dotenv
 langchain-text-splitters
+langchain-classic
 argon2-cffi
