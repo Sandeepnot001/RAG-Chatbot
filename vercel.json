@@ -11,5 +11,10 @@
             "source": "/((?!api).*)",
             "destination": "/index.html"
         }
-    ]
+    ],
+    "functions": {
+        "api/**/*.py": {
+            "runtime": "vercel-python@0.1.0"
+        }
+    }
 }
