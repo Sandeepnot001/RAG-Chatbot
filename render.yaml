@@ -1,28 +1,31 @@
 services:
-  # Python Backend
+  # 1. Python Backend Service
   - type: web
-    name: collegebot-backend
+    name: rag-chatbot-backend
     runtime: python
     buildCommand: pip install -r requirements.txt
-    startCommand: python main.py
+    startCommand: uvicorn main:app --host 0.0.0.0 --port 10000
     envVars:
       - key: GOOGLE_API_KEY
-        sync: false # Set this in Render Dashboard
+        sync: false # You will paste your key (AIzaSy...) in the Render Dashboard
       - key: SECRET_KEY
         generateValue: true
       - key: LOCAL_DEV
         value: "false"
+      - key: PYTHON_VERSION
+        value: 3.10.0
 
-  # Static Frontend (Vite)
+  # 2. Static Frontend Service (Vite)
   - type: web
-    name: collegebot-frontend
+    name: rag-chatbot-frontend
     runtime: static
     buildCommand: npm install --prefix frontend && npm run build --prefix frontend
     staticPublishPath: frontend/dist
     routes:
       - type: rewrite
         src: /api/*
-        dest: https://collegebot-backend.onrender.com/api/* # Replace with your actual backend URL after first deploy
+        # This points the frontend to your backend service automatically
+        dest: https://rag-chatbot-backend.onrender.com/api/* 
       - type: rewrite
         src: /*
         dest: /index.html
