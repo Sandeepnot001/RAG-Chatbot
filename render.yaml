@@ -1,14 +1,28 @@
 services:
+  # Python Backend
   - type: web
-    name: rag-chatbot-cocl
-    env: python
+    name: collegebot-backend
+    runtime: python
     buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    startCommand: python main.py
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.12.1
-      - key: LLM_PROVIDER
-        value: Google
-      - fromContext: GOOGLE_API_KEY
-      - fromContext: OPENAI_API_KEY
-      - fromContext: SECRET_KEY
+      - key: GOOGLE_API_KEY
+        sync: false # Set this in Render Dashboard
+      - key: SECRET_KEY
+        generateValue: true
+      - key: LOCAL_DEV
+        value: "false"
+
+  # Static Frontend (Vite)
+  - type: web
+    name: collegebot-frontend
+    runtime: static
+    buildCommand: npm install --prefix frontend && npm run build --prefix frontend
+    staticPublishPath: frontend/dist
+    routes:
+      - type: rewrite
+        src: /api/*
+        dest: https://collegebot-backend.onrender.com/api/* # Replace with your actual backend URL after first deploy
+      - type: rewrite
+        src: /*
+        dest: /index.html
